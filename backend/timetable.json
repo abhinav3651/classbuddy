@@ -1,0 +1,35 @@
+
+
+[
+    {
+      "day": "Monday",
+      "slots": [
+        {"start": "08:00", "end": "08:55", "subject": "Placement Preparation Class", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "09:00", "end": "09:55", "subject": "CS-601", "location": "CR-3", "group": "G1", "teacher": "Dr. Mehta"},
+        {"start": "09:00", "end": "09:55", "subject": "CS-603", "location": "CR-8", "group": "G2", "teacher": "Prof. Kapoor"},
+        {"start": "10:10", "end": "11:05", "subject": "CS-603", "location": "CR-3", "group": "G1", "teacher": "Prof. Kapoor"},
+        {"start": "10:10", "end": "11:05", "subject": "CS-601", "location": "CR-8", "group": "G2", "teacher": "Dr. Mehta"},
+        {"start": "11:10", "end": "12:05", "subject": "Discussion Class", "location": "", "group": "All", "teacher": "Mr. Gupta"},
+        {"start": "12:00", "end": "12:55", "subject": "Lab-1", "location": "", "group": "G1", "teacher": "Ms. Iyer"},
+        {"start": "12:00", "end": "12:55", "subject": "Lab-2", "location": "", "group": "G2", "teacher": "Mr. Rakesh"},
+        {"start": "01:00", "end": "01:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
+        {"start": "01:55", "end": "02:50", "subject": "TCS-609", "location": "LT-7", "group": "All", "teacher": "Dr. Nair"},
+        {"start": "03:10", "end": "04:00", "subject": "Competitive Programming Audit Course", "location": "CR-3", "group": "All", "teacher": "Mr. Rajan"},
+        {"start": "04:00", "end": "04:55", "subject": "Computer Design Lab (G1)", "location": "Lab-1", "group": "G1", "teacher": "Ms. Iyer"},
+        {"start": "04:00", "end": "04:55", "subject": "Web Development Lab (G2)", "location": "Lab-2", "group": "G2", "teacher": "Mr. Rakesh"}
+      ]
+    },
+    {
+      "day": "Tuesday",
+      "slots": [
+        {"start": "08:00", "end": "08:55", "subject": "Placement Preparation Class", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "11:10", "end": "12:05", "subject": "CS-601 (Herbal)", "location": "CR-7", "group": "All", "teacher": "Dr. Mehta"},
+        {"start": "12:00", "end": "12:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
+        {"start": "01:00", "end": "01:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
+        {"start": "01:55", "end": "02:50", "subject": "TCS-609", "location": "LT-7", "group": "All", "teacher": "Dr. Nair"},
+        {"start": "03:10", "end": "04:00", "subject": "Computer Network Lab (G1)", "location": "First Floor", "group": "G1", "teacher": "Dr. Prasad"},
+        {"start": "03:10", "end": "04:00", "subject": "Web Development Lab (G2)", "location": "Lab-2", "group": "G2", "teacher": "Mr. Rakesh"}
+      ]
+    }
+  ]
+  
