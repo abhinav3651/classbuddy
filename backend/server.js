@@ -7,10 +7,14 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth.js';
 import teacherRoutes from './routes/teachers.js';
 import slotRoutes from './routes/slots.js';
-import seedTestUser from './seed.js';  // Direct import from same directory
+import seedTestUser from './seed.js';
+import seedClassrooms from './seedClassrooms.js';
+import seedSeminarHall from './seedSeminarHall.js';
 import User from './models/User.js';
 import timetableRoutes from './routes/timetable.js';
 import requestRoutes from './routes/requests.js';
+import classroomRoutes from './routes/classrooms.js';
+import seminarBookingRoutes from './routes/seminarBooking.js';
 dotenv.config();
 
 const app = express();
@@ -54,6 +58,8 @@ app.use('/api/teachers', teacherRoutes);
 app.use('/api/slots', slotRoutes);
 app.use('/api/timetable', timetableRoutes);
 app.use('/api/requests', requestRoutes);
+app.use('/api/classrooms', classroomRoutes);
+app.use('/api/seminar', seminarBookingRoutes);
 
 // Connect to MongoDB and seed data
 const startServer = async () => {
@@ -62,6 +68,8 @@ const startServer = async () => {
     console.log('Connected to MongoDB');
     
     await seedTestUser();
+    await seedClassrooms();
+    await seedSeminarHall();
     
     const PORT = process.env.PORT || 5000;
     httpServer.listen(PORT, () => {

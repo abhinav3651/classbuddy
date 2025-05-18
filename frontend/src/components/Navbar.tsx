@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Calendar, Menu, X } from 'lucide-react';
+import { Calendar, Menu, X, Search, BookOpen } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const { state } = useAuth();
@@ -12,8 +12,11 @@ const Navbar: React.FC = () => {
     setIsOpen(!isOpen);
   };
 
-  // Determine dashboard route based on user role
-  const dashboardRoute = user?.role === 'student' ? '/student-dashboard' : '/teacher-dashboard';
+  // Determine routes based on user role
+  const baseRoute = user?.role === 'student' ? '/student' : '/teacher';
+  const dashboardRoute = `${baseRoute}/dashboard`;
+  const freeClassroomsRoute = `${baseRoute}/free-classrooms`;
+  const seminarHallRoute = `${baseRoute}/seminar-hall`;
 
   return (
     <nav className="bg-blue-600">
@@ -36,6 +39,20 @@ const Navbar: React.FC = () => {
                     className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200"
                   >
                     Dashboard
+                  </Link>
+                  <Link
+                    to={freeClassroomsRoute}
+                    className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center"
+                  >
+                    <Search className="h-4 w-4 mr-1" />
+                    Find Free Classrooms
+                  </Link>
+                  <Link
+                    to={seminarHallRoute}
+                    className="text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 flex items-center"
+                  >
+                    <BookOpen className="h-4 w-4 mr-1" />
+                    Seminar Hall
                   </Link>
                   <Link
                     to="/profile"
@@ -81,6 +98,22 @@ const Navbar: React.FC = () => {
                   onClick={toggleMenu}
                 >
                   Dashboard
+                </Link>
+                <Link
+                  to={freeClassroomsRoute}
+                  className="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium flex items-center"
+                  onClick={toggleMenu}
+                >
+                  <Search className="h-4 w-4 mr-1" />
+                  Find Free Classrooms
+                </Link>
+                <Link
+                  to={seminarHallRoute}
+                  className="text-white hover:bg-blue-700 block px-3 py-2 rounded-md text-base font-medium flex items-center"
+                  onClick={toggleMenu}
+                >
+                  <BookOpen className="h-4 w-4 mr-1" />
+                  Seminar Hall
                 </Link>
                 <Link
                   to="/profile"

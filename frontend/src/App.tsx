@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage';
 import StudentDashboard from './pages/StudentDashboard';
 import TeacherDashboard from './pages/TeacherDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import FreeClassrooms from './components/FreeClassrooms';
+import SeminarHall from './pages/SeminarHall';
 
 const router = {
   future: {
@@ -27,12 +29,16 @@ function App() {
           <Route path="/student" element={<ProtectedRoute allowedRoles={['student']} />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<StudentDashboard />} />
+            <Route path="free-classrooms" element={<FreeClassrooms />} />
+            <Route path="seminar-hall" element={<SeminarHall />} />
           </Route>
           
           {/* Protected Teacher Routes */}
-          <Route path="/teacher" element={<ProtectedRoute allowedRoles={['teacher']} />}>
+          <Route path="/teacher" element={<ProtectedRoute allowedRoles={['teacher', 'hod']} />}>
             <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={<TeacherDashboard />} />
+            <Route path="free-classrooms" element={<FreeClassrooms />} />
+            <Route path="seminar-hall" element={<SeminarHall />} />
           </Route>
           
           {/* Default redirects */}
