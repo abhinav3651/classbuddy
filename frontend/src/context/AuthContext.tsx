@@ -21,11 +21,11 @@ const initialState: AuthState = {
 // Create context
 const AuthContext = createContext<{
   state: AuthState;
-  login: (user: User, token: string) => void;
+  login: (user: User, token: string) => Promise<void>;
   logout: () => void;
 }>({
   state: initialState,
-  login: () => {},
+  login: async () => {},
   logout: () => {},
 });
 
@@ -41,13 +41,6 @@ const authReducer = (state: AuthState, action: AuthAction): AuthState => {
         loading: false,
       };
     case 'LOGOUT':
-      return {
-        ...state,
-        isAuthenticated: false,
-        user: null,
-        token: null,
-        loading: false,
-      };
     case 'AUTH_ERROR':
       return {
         ...state,
@@ -74,21 +67,34 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   useEffect(() => {
     const loadUser = async () => {
       try {
+        dispatch({ type: 'SET_LOADING', payload: true });
         const token = localStorage.getItem(TOKEN_KEY);
         const userStr = localStorage.getItem(USER_KEY);
 
         if (token && userStr) {
-          const user = JSON.parse(userStr) as User;
-          dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
-          
-          // Initialize socket and join user room
-          initSocket();
-          joinUserRoom(user);
+          try {
+            const user = JSON.parse(userStr) as User;
+            dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
+            
+            // Initialize socket and join user room
+            await initSocket();
+            await joinUserRoom(user);
+          } catch (error) {
+            console.error('Error parsing user data:', error);
+            dispatch({ type: 'AUTH_ERROR' });
+            localStorage.removeItem(TOKEN_KEY);
+            localStorage.removeItem(USER_KEY);
+          }
         } else {
           dispatch({ type: 'AUTH_ERROR' });
         }
       } catch (error) {
+        console.error('Error loading auth state:', error);
         dispatch({ type: 'AUTH_ERROR' });
+        localStorage.removeItem(TOKEN_KEY);
+        localStorage.removeItem(USER_KEY);
+      } finally {
+        dispatch({ type: 'SET_LOADING', payload: false });
       }
     };
 
@@ -96,27 +102,33 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // Login function
-  const login = (user: User, token: string) => {
-    // Save to localStorage
-    localStorage.setItem(TOKEN_KEY, token);
-    localStorage.setItem(USER_KEY, JSON.stringify(user));
+  const login = async (user: User, token: string) => {
+    try {
+      // Save to localStorage
+      localStorage.setItem(TOKEN_KEY, token);
+      localStorage.setItem(USER_KEY, JSON.stringify(user));
 
-    // Update state
-    dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
+      // Update state
+      dispatch({ type: 'LOGIN_SUCCESS', payload: { user, token } });
 
-    // Initialize socket and join user room
-    initSocket();
-    joinUserRoom(user);
+      // Initialize socket and join user room
+      await initSocket();
+      await joinUserRoom(user);
+    } catch (error) {
+      console.error('Error during login:', error);
+      localStorage.removeItem(TOKEN_KEY);
+      localStorage.removeItem(USER_KEY);
+      dispatch({ type: 'AUTH_ERROR' });
+      throw error;
+    }
   };
 
   // Logout function
   const logout = () => {
-    // Remove from localStorage
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem(USER_KEY);
-
-    // Update state
     dispatch({ type: 'LOGOUT' });
+    window.location.href = '/login';
   };
 
   return (

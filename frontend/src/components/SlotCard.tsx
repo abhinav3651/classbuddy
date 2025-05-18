@@ -14,7 +14,7 @@ const SlotCard: React.FC<SlotCardProps> = ({ item, type, onAction }) => {
   const isRequest = 'status' in item;
   
   // Extract common properties
-  const { id, startTime, endTime, subject } = item;
+  const { _id, startTime, endTime, subject } = item;
   
   // Get status-specific styling
   const getStatusStyle = () => {
@@ -110,7 +110,7 @@ const SlotCard: React.FC<SlotCardProps> = ({ item, type, onAction }) => {
         
         {type === 'availability' && isTimeSlot && (
           <button
-            onClick={() => onAction && onAction(id)}
+            onClick={() => onAction && onAction(_id)}
             className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded transition-colors duration-200"
           >
             Request Slot
@@ -120,13 +120,13 @@ const SlotCard: React.FC<SlotCardProps> = ({ item, type, onAction }) => {
         {type === 'request' && isRequest && (item as SlotRequest).status === 'pending' && (
           <div className="flex space-x-2">
             <button
-              onClick={() => onAction && onAction(id, 'accept')}
+              onClick={() => onAction && onAction(_id, 'accept')}
               className="flex-1 py-2 px-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded transition-colors duration-200"
             >
               Accept
             </button>
             <button
-              onClick={() => onAction && onAction(id, 'reject')}
+              onClick={() => onAction && onAction(_id, 'reject')}
               className="flex-1 py-2 px-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded transition-colors duration-200"
             >
               Reject

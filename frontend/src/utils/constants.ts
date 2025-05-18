@@ -1,5 +1,5 @@
 // API Endpoints
-export const API_URL = 'http://localhost:5000/api'; // Local backend URL
+export const API_URL = 'http://localhost:5000'; // Local backend URL
 
 // Local Storage Keys
 export const TOKEN_KEY = 'slot_selector_token';
@@ -41,8 +41,10 @@ export const SUBJECTS = [
 export const SOCKET_EVENTS = {
   CONNECT: 'connect',
   DISCONNECT: 'disconnect',
+  ERROR: 'error',
   JOIN: 'join',
-  REQUEST_SLOT: 'requestSlot',
-  REQUEST_RESPONSE: 'requestResponse',
-  NEW_REQUEST: 'newRequest',
-};
+  NEW_REQUEST: 'new_request',
+  REQUEST_SLOT: 'request_slot',
+  REQUEST_RESPONSE: 'request_response',
+  NOTIFICATION: 'notification'
+} as const;

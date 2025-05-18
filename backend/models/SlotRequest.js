@@ -2,8 +2,7 @@ import mongoose from 'mongoose';
 
 const slotRequestSchema = new mongoose.Schema({
   slotId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'TimeSlot',
+    type: String,
     required: true
   },
   studentId: {
@@ -29,6 +28,14 @@ const slotRequestSchema = new mongoose.Schema({
     required: true
   },
   subject: {
+    type: String,
+    default: 'Meeting Request'
+  },
+  purpose: {
+    type: String,
+    required: true
+  },
+  studentDetails: {
     type: String,
     required: true
   },

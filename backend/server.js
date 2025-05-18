@@ -10,77 +10,50 @@ import slotRoutes from './routes/slots.js';
 import seedTestUser from './seed.js';  // Direct import from same directory
 import User from './models/User.js';
 import timetableRoutes from './routes/timetable.js';
+import requestRoutes from './routes/requests.js';
 dotenv.config();
 
 const app = express();
 const httpServer = createServer(app);
-// Enhanced CORS configuration
-const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow all origins in development
-    if (process.env.NODE_ENV !== 'production') {
-      return callback(null, true);
-    }
-    
-    // In production, specify allowed domains
-    const allowedDomains = [
-      'https://yourproductiondomain.com',
-      'https://www.yourproductiondomain.com'
-    ];
-    
-    if (!origin || allowedDomains.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-};
 
-app.use(cors(corsOptions));
-app.use(express.json());
-
-// Socket.IO configuration
+// Socket.IO setup with CORS
 const io = new Server(httpServer, {
   cors: {
-    origin: process.env.NODE_ENV !== 'production' ? '*' : [
-      'https://yourproductiondomain.com',
-      'https://www.yourproductiondomain.com'
-    ],
-    methods: ['GET', 'POST'],
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
   }
 });
 
-// Socket.IO connection handling
+// Attach io to app for use in routes
+app.set('io', io);
+
+// Socket.IO event handlers
 io.on('connection', (socket) => {
-  console.log('User connected:', socket.id);
+  console.log('Client connected:', socket.id);
 
-  socket.on('join', ({ userId, role }) => {
-    socket.join(userId);
-    console.log(`${role} ${userId} joined their room`);
-  });
-
-  socket.on('requestSlot', (data) => {
-    io.to(data.teacherId).emit('newRequest', data);
-  });
-
-  socket.on('requestResponse', (data) => {
-    io.to(data.studentId).emit('requestResponse', data);
+  socket.on('join', ({ userId }) => {
+    if (userId) {
+      socket.join(userId);
+      console.log(`User ${userId} joined their room`);
+    }
   });
 
   socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+    console.log('Client disconnected:', socket.id);
   });
 });
+
+// Middleware
+app.use(cors());
+app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/teachers', teacherRoutes);
 app.use('/api/slots', slotRoutes);
 app.use('/api/timetable', timetableRoutes);
+app.use('/api/requests', requestRoutes);
 
 // Connect to MongoDB and seed data
 const startServer = async () => {

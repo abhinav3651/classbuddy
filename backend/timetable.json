@@ -1,34 +1,66 @@
-
-
 [
     {
       "day": "Monday",
       "slots": [
-        {"start": "08:00", "end": "08:55", "subject": "Placement Preparation Class", "location": "", "group": "All", "teacher": "Mr. Sharma"},
-        {"start": "09:00", "end": "09:55", "subject": "CS-601", "location": "CR-3", "group": "G1", "teacher": "Dr. Mehta"},
-        {"start": "09:00", "end": "09:55", "subject": "CS-603", "location": "CR-8", "group": "G2", "teacher": "Prof. Kapoor"},
-        {"start": "10:10", "end": "11:05", "subject": "CS-603", "location": "CR-3", "group": "G1", "teacher": "Prof. Kapoor"},
-        {"start": "10:10", "end": "11:05", "subject": "CS-601", "location": "CR-8", "group": "G2", "teacher": "Dr. Mehta"},
-        {"start": "11:10", "end": "12:05", "subject": "Discussion Class", "location": "", "group": "All", "teacher": "Mr. Gupta"},
-        {"start": "12:00", "end": "12:55", "subject": "Lab-1", "location": "", "group": "G1", "teacher": "Ms. Iyer"},
-        {"start": "12:00", "end": "12:55", "subject": "Lab-2", "location": "", "group": "G2", "teacher": "Mr. Rakesh"},
-        {"start": "01:00", "end": "01:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
-        {"start": "01:55", "end": "02:50", "subject": "TCS-609", "location": "LT-7", "group": "All", "teacher": "Dr. Nair"},
-        {"start": "03:10", "end": "04:00", "subject": "Competitive Programming Audit Course", "location": "CR-3", "group": "All", "teacher": "Mr. Rajan"},
-        {"start": "04:00", "end": "04:55", "subject": "Computer Design Lab (G1)", "location": "Lab-1", "group": "G1", "teacher": "Ms. Iyer"},
-        {"start": "04:00", "end": "04:55", "subject": "Web Development Lab (G2)", "location": "Lab-2", "group": "G2", "teacher": "Mr. Rakesh"}
+        {"start": "8:00", "end": "8:55", "subject": "Placement Preparation Classes", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "8:55", "end": "9:50", "subject": "Compiler Design Lab", "location": "Lab-1", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "10:10", "end": "11:05", "subject": "LUNCH", "location": "", "group": "All", "teacher": ""},
+        {"start": "11:05", "end": "12:00", "subject": "XCS-601 (Soft Skills)", "location": "LT-6", "group": "All", "teacher": "Dr. Gopal Krishna Dwivedi"},
+        {"start": "1:00", "end": "1:55", "subject": "TCS-604", "location": "LT-6", "group": "All", "teacher": "Dr. Sumit Pundir"},
+        {"start": "1:55", "end": "2:50", "subject": "TCS-604", "location": "LT-6", "group": "All", "teacher": "Dr. Sumit Pundir"},
+        {"start": "3:10", "end": "4:00", "subject": "TCS-693", "location": "LT-7", "group": "All", "teacher": "Dr. Parul Madan"},
+        {"start": "4:00", "end": "4:55", "subject": "TCS-693", "location": "LT-7", "group": "All", "teacher": "Dr. Parul Madan"}
       ]
     },
     {
       "day": "Tuesday",
       "slots": [
-        {"start": "08:00", "end": "08:55", "subject": "Placement Preparation Class", "location": "", "group": "All", "teacher": "Mr. Sharma"},
-        {"start": "11:10", "end": "12:05", "subject": "CS-601 (Herbal)", "location": "CR-7", "group": "All", "teacher": "Dr. Mehta"},
-        {"start": "12:00", "end": "12:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
-        {"start": "01:00", "end": "01:55", "subject": "Lunch", "location": "", "group": "All", "teacher": ""},
-        {"start": "01:55", "end": "02:50", "subject": "TCS-609", "location": "LT-7", "group": "All", "teacher": "Dr. Nair"},
-        {"start": "03:10", "end": "04:00", "subject": "Computer Network Lab (G1)", "location": "First Floor", "group": "G1", "teacher": "Dr. Prasad"},
-        {"start": "03:10", "end": "04:00", "subject": "Web Development Lab (G2)", "location": "Lab-2", "group": "G2", "teacher": "Mr. Rakesh"}
+        {"start": "8:00", "end": "8:55", "subject": "Placement Preparation Classes", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "8:55", "end": "9:50", "subject": "Web Development Lab", "location": "Lab-3", "group": "All", "teacher": "Dr. Parul Madan"},
+        {"start": "10:10", "end": "11:05", "subject": "TCS-693", "location": "CR-6", "group": "All", "teacher": "Dr. Parul Madan"},
+        {"start": "11:05", "end": "12:00", "subject": "LUNCH", "location": "", "group": "All", "teacher": ""},
+        {"start": "1:00", "end": "1:55", "subject": "TCS-601", "location": "LT-7", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "1:55", "end": "2:50", "subject": "TCS-604", "location": "LT-7", "group": "All", "teacher": "Dr. Sumit Pundir"},
+        {"start": "3:10", "end": "4:00", "subject": "Discussion Class", "location": "LT-7", "group": "All", "teacher": "Dr. Neha Tripathi"},
+        {"start": "4:00", "end": "4:55", "subject": "Competitive Programming", "location": "Online", "group": "All", "teacher": "Mr. Akshay Rajput"}
+      ]
+    },
+    {
+      "day": "Wednesday",
+      "slots": [
+        {"start": "8:00", "end": "8:55", "subject": "Placement Preparation Classes", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "8:55", "end": "9:50", "subject": "Compiler Design Lab", "location": "Lab-1", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "10:10", "end": "11:05", "subject": "TCS-604", "location": "LT-6", "group": "All", "teacher": "Dr. Sumit Pundir"},
+        {"start": "11:05", "end": "12:00", "subject": "LUNCH", "location": "", "group": "All", "teacher": ""},
+        {"start": "1:00", "end": "1:55", "subject": "TCS-601", "location": "LT-6", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "1:55", "end": "2:50", "subject": "TCS-601", "location": "LT-6", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "3:10", "end": "4:00", "subject": "Computer Networks Lab", "location": "Lab-1", "group": "All", "teacher": "Dr. Sumit Pundir"}
+      ]
+    },
+    {
+      "day": "Thursday",
+      "slots": [
+        {"start": "8:00", "end": "8:55", "subject": "Placement Preparation Classes", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "8:55", "end": "9:50", "subject": "XCS-601 (QAR)", "location": "LT-7", "group": "All", "teacher": "Mr. Saurabh Rawat"},
+        {"start": "10:10", "end": "11:05", "subject": "TCS-693", "location": "LT-7", "group": "All", "teacher": "Dr. Parul Madan"},
+        {"start": "11:05", "end": "12:00", "subject": "XCS-601 (Verbal)", "location": "LT-7", "group": "All", "teacher": "Mr. Okesh Chhabra"},
+        {"start": "12:00", "end": "12:55", "subject": "LUNCH", "location": "", "group": "All", "teacher": ""},
+        {"start": "1:00", "end": "1:55", "subject": "Computer Networks Lab", "location": "Digital Lab-2", "group": "All", "teacher": "Dr. Sumit Pundir"},
+        {"start": "3:10", "end": "4:00", "subject": "Elective", "location": "", "group": "All", "teacher": ""},
+        {"start": "4:00", "end": "4:55", "subject": "Elective", "location": "", "group": "All", "teacher": ""}
+      ]
+    },
+    {
+      "day": "Friday",
+      "slots": [
+        {"start": "8:00", "end": "8:55", "subject": "Placement Preparation Classes", "location": "", "group": "All", "teacher": "Mr. Sharma"},
+        {"start": "8:55", "end": "9:50", "subject": "Web Development Lab", "location": "Lab-1", "group": "All", "teacher": "Dr. Parul Madan"},
+        {"start": "10:10", "end": "11:05", "subject": "Project Based Learning", "location": "", "group": "All", "teacher": ""},
+        {"start": "11:05", "end": "12:00", "subject": "Project Based Learning", "location": "", "group": "All", "teacher": ""},
+        {"start": "1:00", "end": "1:55", "subject": "TCS-631 (Through Swayam)", "location": "", "group": "All", "teacher": "Dr. Akanksha Gupta"},
+        {"start": "1:55", "end": "2:50", "subject": "TCS-601", "location": "LT-6", "group": "All", "teacher": "Dr. Devesh Pratap Singh"},
+        {"start": "3:10", "end": "4:00", "subject": "Elective", "location": "", "group": "All", "teacher": ""},
+        {"start": "4:00", "end": "4:55", "subject": "Elective", "location": "", "group": "All", "teacher": ""}
       ]
     }
   ]

@@ -19,23 +19,16 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles }) => {
     );
   }
 
-  // Check if user is authenticated and has the allowed role
-  if (isAuthenticated && user && allowedRoles.includes(user.role)) {
-    return <Outlet />;
+  if (!isAuthenticated || !user) {
+    return <Navigate to="/login" replace />;
   }
 
-  // If user is authenticated but doesn't have the allowed role
-  if (isAuthenticated && user) {
+  if (!allowedRoles.includes(user.role)) {
     // Redirect to appropriate dashboard based on role
-    if (user.role === 'student') {
-      return <Navigate to="/student-dashboard" replace />;
-    } else if (user.role === 'teacher') {
-      return <Navigate to="/teacher-dashboard" replace />;
-    }
+    return <Navigate to={`/${user.role}/dashboard`} replace />;
   }
 
-  // If user is not authenticated, redirect to login
-  return <Navigate to="/login" replace />;
+  return <Outlet />;
 };
 
 export default ProtectedRoute;

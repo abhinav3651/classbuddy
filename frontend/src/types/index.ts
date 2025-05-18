@@ -2,6 +2,7 @@
 export interface User {
   id: string;
   name: string;
+  email: string;
   role: 'student' | 'teacher';
 }
 
@@ -14,39 +15,47 @@ export interface AuthState {
 
 // Slot & Schedule Types
 export interface TimeSlot {
-  id: string;
+  _id: string;
   teacherId: string;
   day: string;
   startTime: string;
   endTime: string;
   subject: string;
-  location: string;
   isAvailable: boolean;
 }
 
 export interface SlotRequest {
-  id: string;
+  _id: string;
   slotId: string;
   studentId: string;
-  studentName: string;
   teacherId: string;
-  teacherName: string;
   day: string;
   startTime: string;
   endTime: string;
+  purpose: string;
+  studentDetails: string;
   subject: string;
   status: 'pending' | 'accepted' | 'rejected';
   createdAt: string;
+  updatedAt: string;
 }
 
 export interface Teacher {
-  id: string;
+  _id: string;
   name: string;
-  subject: string;
+  subject?: string;
 }
 
 // Socket Message Types
 export interface SocketMessage {
   type: string;
   payload: any;
+}
+
+export interface TimetableSlot {
+  teacher: string;
+  subject: string;
+  location: string;
+  startTime: string;
+  endTime: string;
 }

@@ -1,38 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Calendar, User, Lock } from 'lucide-react';
 import NotificationToast from '../components/NotificationToast';
-import { API_URL } from '../utils/constants'; 
-
-export interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    role: 'student' | 'teacher';
-  };
-}
-
-export const loginUser = async (
-  email: string,
-  password: string,
-  role: 'student' | 'teacher'
-): Promise<LoginResponse> => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, role }),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({}));
-    throw new Error(errorData.message || 'Login failed');
-  }
-
-  return response.json();
-};
+import { loginUser } from '../utils/api';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -41,8 +12,15 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
-  const { login } = useAuth();
+  const { login, state } = useAuth();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (state.isAuthenticated && state.user) {
+      navigate(`/${state.user.role}/dashboard`, { replace: true });
+    }
+  }, [state.isAuthenticated, state.user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,26 +28,13 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     try {
-      console.log('Attempting login with:', { email, role }); // Log login attempt
-      console.log('Request payload:', { email, password, role }); // Add this line
       const result = await loginUser(email, password, role);
       
-      // Successful login
-      login(
-        {
-          id: result.user.id,
-          name: result.user.name,
-          role: result.user.role,
-        },
-        result.token
-      );
-
-      // Redirect based on role
-      if (role === 'student') {
-        navigate('/student-dashboard');
-      } else {
-        navigate('/teacher-dashboard');
-      }
+      // First update auth state
+      await login(result.user, result.token);
+      
+      // Then navigate
+      navigate(`/${role}/dashboard`, { replace: true });
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : String(err);
       setError(errorMsg || 'An unexpected error occurred. Please try again.');
@@ -77,6 +42,7 @@ const LoginPage: React.FC = () => {
       setLoading(false);
     }
   };
+
   return (
     <div className="flex flex-col justify-center min-h-screen bg-gray-50">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">

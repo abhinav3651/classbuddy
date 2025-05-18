@@ -4,9 +4,11 @@ import SlotCard from '../components/SlotCard';
 import NotificationToast from '../components/NotificationToast';
 import { useAuth } from '../context/AuthContext';
 import { getTeacherRequests, respondToRequest } from '../utils/api';
-import { addSocketListener, emitRequestResponse, removeSocketListener } from '../utils/socket';
-import { SlotRequest } from '../types';
+import { addSocketListener, emitRequestResponse, removeSocketListener, joinRoom } from '../utils/socket';
 import { SOCKET_EVENTS } from '../utils/constants';
+import { toast } from 'react-hot-toast';
+import { SlotRequest } from '../types';
+import RequestsManager from '../components/RequestsManager';
 
 const TeacherDashboard: React.FC = () => {
   const { state } = useAuth();
@@ -20,17 +22,29 @@ const TeacherDashboard: React.FC = () => {
     type: 'success' | 'error' | 'info';
   } | null>(null);
 
-  // Fetch requests on component mount
+  // Load initial requests
   useEffect(() => {
     loadRequests();
+  }, []);
 
-    // Set up socket listener for new requests
+  useEffect(() => {
+    if (!user) return;
+
+    // Join user's room for notifications
+    joinRoom(user.id);
+
+    // Listen for new requests
+    const handleNewRequest = (data: SlotRequest) => {
+      setRequests(prev => [data, ...prev]);
+      toast(`New meeting request from ${data.studentDetails}`);
+    };
+
     addSocketListener(SOCKET_EVENTS.NEW_REQUEST, handleNewRequest);
 
     return () => {
       removeSocketListener(SOCKET_EVENTS.NEW_REQUEST);
     };
-  }, []);
+  }, [user]);
 
   // Load teacher's requests
   const loadRequests = async () => {
@@ -49,49 +63,39 @@ const TeacherDashboard: React.FC = () => {
     }
   };
 
-  // Handler for new request socket event
-  const handleNewRequest = (data: SlotRequest) => {
-    setRequests((prevRequests) => [data, ...prevRequests]);
-    setNotification({
-      message: `New slot request from ${data.studentName}`,
-      type: 'info',
-    });
-  };
-
   // Respond to a request (accept/reject)
-  const handleRespond = async (requestId: string, action: string) => {
+  const handleRespond = async (requestId: string, action: 'accept' | 'reject') => {
     if (!user) return;
 
     const status = action === 'accept' ? 'accepted' : 'rejected';
     try {
-      const updatedRequest = await respondToRequest(requestId, status);
-
-      // Find the student ID from the request
-      const request = requests.find((r) => r.id === requestId);
-      if (!request) return;
-
-      // Emit socket event
-      emitRequestResponse({
-        requestId,
-        studentId: request.studentId,
-        status,
-      });
+      await respondToRequest(requestId, status);
 
       // Update UI
-      setRequests((prevRequests) =>
-        prevRequests.map((req) => (req.id === requestId ? { ...req, status } : req))
+      setRequests(prevRequests => 
+        prevRequests.map(r => 
+          r._id === requestId ? { ...r, status } : r
+        )
       );
 
-      setNotification({
-        message: `Request ${status} successfully!`,
-        type: 'success',
-      });
+      // Emit socket event
+      const request = requests.find(r => r._id === requestId);
+      if (request) {
+        emitRequestResponse({
+          requestId,
+          studentId: request.studentId,
+          status,
+          teacherName: user.name,
+          subject: request.subject,
+          startTime: request.startTime,
+          endTime: request.endTime
+        });
+      }
+
+      toast.success(`Successfully ${status} the request`);
     } catch (error) {
-      console.error(`Error ${status} request:`, error);
-      setNotification({
-        message: `Failed to ${action} request. Please try again.`,
-        type: 'error',
-      });
+      console.error(`Error ${action}ing request:`, error);
+      toast.error(`Failed to ${action} the request`);
     }
   };
 
@@ -102,68 +106,42 @@ const TeacherDashboard: React.FC = () => {
 
   return (
     <Layout title="Teacher Dashboard">
-      {/* Pending Requests */}
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-800 mb-4">Pending Requests</h2>
-        {loading ? (
-          <div className="flex items-center justify-center py-8">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
-          </div>
-        ) : pendingRequests.length === 0 ? (
-          <div className="bg-gray-50 py-8 text-center rounded-lg border border-gray-200">
-            <p className="text-gray-500">No pending requests at the moment.</p>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {pendingRequests.map((request) => (
-              <SlotCard
-                key={request.id}
-                item={request}
-                type="request"
-                onAction={handleRespond}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Responded Requests (Tabs) */}
-      <div>
-        <div className="sm:hidden">
-          <label htmlFor="requestTabs" className="sr-only">
-            Select a tab
-          </label>
-          <select
-            id="requestTabs"
-            name="requestTabs"
-            className="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
-            defaultValue="accepted"
-          >
-            <option value="accepted">Accepted Requests</option>
-            <option value="rejected">Rejected Requests</option>
-          </select>
-        </div>
+      <div className="space-y-8">
+        {/* Existing timetable/schedule components */}
         
-        <div className="hidden sm:block">
-          <div className="border-b border-gray-200">
-            <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-              <button
-                className="border-blue-500 text-blue-600 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-                aria-current="page"
-              >
-                Accepted Requests
-              </button>
-              <button
-                className="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm"
-              >
-                Rejected Requests
-              </button>
-            </nav>
-          </div>
+        {/* Meeting Requests Section */}
+        <section>
+          <RequestsManager />
+        </section>
+
+        {/* Pending Requests */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Pending Requests</h2>
+          {loading ? (
+            <div className="flex items-center justify-center py-8">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+            </div>
+          ) : pendingRequests.length === 0 ? (
+            <div className="bg-gray-50 py-8 text-center rounded-lg border border-gray-200">
+              <p className="text-gray-500">No pending requests at the moment.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {pendingRequests.map((request) => (
+                <SlotCard
+                  key={request._id}
+                  item={request}
+                  type="request"
+                  onAction={(id, action) => handleRespond(id, action as 'accept' | 'reject')}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Accepted Requests Content */}
-        <div className="mt-6">
+        {/* Accepted Requests */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Accepted Requests</h2>
           {acceptedRequests.length === 0 ? (
             <div className="bg-gray-50 py-8 text-center rounded-lg border border-gray-200">
               <p className="text-gray-500">No accepted requests.</p>
@@ -171,7 +149,23 @@ const TeacherDashboard: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {acceptedRequests.map((request) => (
-                <SlotCard key={request.id} item={request} type="request" />
+                <SlotCard key={request._id} item={request} type="request" />
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Rejected Requests */}
+        <div>
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Rejected Requests</h2>
+          {rejectedRequests.length === 0 ? (
+            <div className="bg-gray-50 py-8 text-center rounded-lg border border-gray-200">
+              <p className="text-gray-500">No rejected requests.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {rejectedRequests.map((request) => (
+                <SlotCard key={request._id} item={request} type="request" />
               ))}
             </div>
           )}
