@@ -182,9 +182,9 @@ const StudentDashboard: React.FC = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <p className="font-medium text-lg">{slot.startTime} - {slot.endTime}</p>
-                      <p className="text-sm text-green-600">Free Slot</p>
+                      <p className="text-sm text-green-600">check slot</p>
                       <p className="text-xs text-gray-500 mt-1">
-                        This slot is available for meeting requests
+                      
                       </p>
                     </div>
                     <button
